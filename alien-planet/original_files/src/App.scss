@@ -1,0 +1,49 @@
+@import 'fonts/fonts.scss';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+body {
+  background: center/cover url(~images/back.jpg) no-repeat;
+  font-family: Troika;
+  font-size: 20px;
+  line-height: 1;
+
+  height: calc(var(--window-inner-height));
+  width: 100vw;
+  overflow: hidden;
+}
+
+#root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+}
+
+input {
+  background: none;
+  outline: none;
+  appearance: none;
+  border: none;
+  padding: 0;
+  width: 110px;
+}

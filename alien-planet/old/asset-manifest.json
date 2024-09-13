@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/alien-planet/static/css/main.c92bb6e7.css",
+    "main.js": "/alien-planet/static/js/main.371dadb5.js",
+    "static/media/rage.otf": "/alien-planet/static/media/rage.7696a0dbaf5418392dc7.otf",
+    "static/media/rage.ttf": "/alien-planet/static/media/rage.eb7778e0ac1ea4546e67.ttf",
+    "static/media/rage.woff": "/alien-planet/static/media/rage.0b2b8c30192746f1ff89.woff",
+    "static/media/back.jpg": "/alien-planet/static/media/back.2c57255577fa16a64007.jpg",
+    "static/media/troika.ttf": "/alien-planet/static/media/troika.7da9f103e0db79703e37.ttf",
+    "static/media/troika.otf": "/alien-planet/static/media/troika.a72178e849120a948f3e.otf",
+    "static/media/troika.woff": "/alien-planet/static/media/troika.3bfe50fc86ac75c22ce4.woff",
+    "index.html": "/alien-planet/index.html",
+    "main.c92bb6e7.css.map": "/alien-planet/static/css/main.c92bb6e7.css.map",
+    "main.371dadb5.js.map": "/alien-planet/static/js/main.371dadb5.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c92bb6e7.css",
+    "static/js/main.371dadb5.js"
+  ]
+}

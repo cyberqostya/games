@@ -1,0 +1,98 @@
+$placeimagewidth: 16px;
+$placeimagegap: 8px;
+
+.player {
+  color: #fff;
+}
+
+.player__visible-part {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 5px;
+  align-items: center;
+}
+
+.player__name {
+  font-size: 18px;
+  font-weight: 500;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.player__places {
+  display: grid;
+  grid-template-columns: repeat(10, $placeimagewidth);
+  column-gap: $placeimagegap;
+}
+
+.player__place-image {
+  width: $placeimagewidth;
+  height: $placeimagewidth;
+  background: center/cover no-repeat;
+
+  transition: all .4s;
+  opacity: 0;
+
+  &:nth-of-type(1) { background-image: url(~images/1.png); }
+  &:nth-of-type(2) { background-image: url(~images/2.png); }
+  &:nth-of-type(3) { background-image: url(~images/3.png); }
+  &:nth-of-type(4) { background-image: url(~images/4.png); }
+  &:nth-of-type(5) { background-image: url(~images/5.png); }
+  &:nth-of-type(6) { background-image: url(~images/6.png); }
+  &:nth-of-type(7) { background-image: url(~images/7.png); }
+  &:nth-of-type(8) { background-image: url(~images/8.png); }
+  &:nth-of-type(9) { background-image: url(~images/9.png); }
+  &:nth-of-type(10) { background-image: url(~images/10.png); }
+
+  &._has {
+    opacity: 1;
+    &._used {
+      opacity: .3;
+    }
+  }
+
+}
+
+.player__invisible-part {
+  display: flex;
+  flex-direction: column;
+  row-gap: $placeimagegap;
+  box-sizing: content-box;
+
+  transition: all .4s;
+  height: 0;
+  padding-top: 0;
+  overflow: hidden;
+}
+
+.player__checkboxes {
+  display: flex;
+  align-items: center;
+  column-gap: $placeimagegap;
+}
+
+.player__checkboxes-title {
+  font-size: $placeimagewidth;
+  line-height: 1;
+  margin-right: auto;
+}
+
+.player__checkboxes-checkbox {
+  width: $placeimagewidth;
+  height: $placeimagewidth;
+  border-radius: 50%;
+  border: 2px solid #a21616;
+  position: relative;
+
+  &:has(input:checked)::after {
+    content: '';
+    width: ($placeimagewidth - 4) / 2;
+    height: ($placeimagewidth - 4) / 2;
+    position: absolute;
+    background-color: #a21616;
+    top: ($placeimagewidth - 4) / 4;
+    right: ($placeimagewidth - 4) / 4;
+    border-radius: 50%;
+  }
+
+  & input { display: none;}
+}
