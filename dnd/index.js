@@ -1,14 +1,25 @@
 import Dice from "./dice.js";
 
+// Карма
+let karmaCounter = 0;
+
 // Блок с отображением результата бросков
+const resultSumNode = document.querySelector(".result__sum");
 const resultNode = document.querySelector(".result");
-let result = 0;
+let resultValues = [];
 function renderResultText() {
-  resultNode.classList[result === 0 ? "add" : "remove"]("_empty");
-  resultNode.textContent = result === 0 ? "" : result;
+  if (resultValues.length === 0) {
+    resultNode.classList.add("_empty");
+    resultNode.textContent = "";
+    resultSumNode.textContent = "";
+  } else {
+    resultNode.classList.remove("_empty");
+    resultNode.textContent = resultValues.reduce((acc, i) => acc + i, 0);
+    if (resultValues.length !== 1) resultSumNode.textContent = "(" + resultValues.join(" + ") + ")";
+  }
 }
 function resetResult() {
-  result = 0;
+  resultValues = [];
   renderResultText();
 }
 
@@ -30,17 +41,29 @@ function renderDicesImages() {
 dicesContainerNode.addEventListener("click", async (e) => {
   if (e.target.classList.contains("_empty")) return;
 
-  let tempResult = 0;
+  dicesContainerNode.classList.add("_disabled");
+
+  const results = [];
   for (let i = 0; i < dices.length; i++) {
     const dice = dices[i];
-    dice.animate();
-    tempResult += dice.roll();
+    const result = dice.roll(karmaCounter);
+    results.push(result);
+
+    // Карма
+    if (result < dice.MIN_SUCCESS_ROLL) {
+      karmaCounter++;
+    } else {
+      karmaCounter = 0;
+    }
+
     await new Promise((res) => setTimeout(res, 300));
   }
 
-  result = tempResult;
   await new Promise((res) => setTimeout(res, 300));
+  resultValues = results;
   renderResultText();
+
+  dicesContainerNode.classList.remove("_disabled");
 });
 
 // Блок с отображением количества добавленных кубиков

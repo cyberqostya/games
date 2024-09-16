@@ -74,6 +74,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   border-bottom: 1px dashed var(--color-gray-100);
 }
 
@@ -86,6 +87,12 @@ img {
 }
 .result._empty:before {
   content: "{результат}";
+  font-style: italic;
+  color: var(--color-gray-200);
+}
+
+.result__sum {
+  font-size: 14px;
   font-style: italic;
   color: var(--color-gray-200);
 }
@@ -110,12 +117,16 @@ img {
   content: "{кубики}";
   color: var(--color-gray-200);
 }
+.dices._disabled {
+  pointer-events: none;
+}
 
 .dice {
   max-width: 270px;
   aspect-ratio: 1;
   flex-grow: 1;
   flex-basis: 0;
+  position: relative;
 }
 .dices._medium .dice {
   flex-grow: 0;
@@ -124,6 +135,19 @@ img {
 .dices._small .dice {
   flex-basis: 15%;
 }
+
+/* .dice__result {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+  color: var(--color-black-100);
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: var(--color-back);
+  box-shadow: 0 0 10px 0 var(--color-back);
+} */
 
 .footer {
   display: flex;
