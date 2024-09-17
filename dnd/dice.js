@@ -29,18 +29,17 @@ export default class Dice {
     this.animate();
 
     // Кармический бросок
-    if (karmaCounter) {
-      // if (Math.random() > 0.8 - karmaCounter / 10) {
-      //   console.log("karma");
-      //   console.log(karmaCounter);
-      //   return this._getKarmaEdge();
-      // } else {
-      //   return this._getRandomEdge();
-      // }
-      return Math.random() > 0.8 - karmaCounter / 10 ? this._getKarmaEdge() : this._getRandomEdge();
+    if (karmaCounter !== undefined) {
+      if (karmaCounter > 2 && Math.random() > 0.7 - karmaCounter / 10) {
+        // console.log("КАРМА", karmaCounter);
+        return this._getKarmaEdge();
+      } else {
+        // console.log("обычный бросок", karmaCounter);
+        return this._getRandomEdge();
+      }
     }
 
-    return this._getRandomEdge();
+    // return this._getRandomEdge();
   };
 
   animate() {

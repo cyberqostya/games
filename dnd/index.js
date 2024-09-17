@@ -1,5 +1,8 @@
 import Dice from "./dice.js";
 
+// Переменные
+let dices = [];
+
 // Карма
 let karmaCounter = 0;
 
@@ -15,17 +18,24 @@ function renderResultText() {
   } else {
     resultNode.classList.remove("_empty");
     resultNode.textContent = resultValues.reduce((acc, i) => acc + i, 0);
-    if (resultValues.length !== 1) resultSumNode.textContent = "(" + resultValues.join(" + ") + ")";
+    if (resultValues.length !== 1) colorSum();
   }
 }
 function resetResult() {
   resultValues = [];
   renderResultText();
 }
+function colorSum() {
+  const result = resultValues.map((i, key) => {
+    if (i === 1) return `<span class="_unluck">${i}</span>`;
+    else if (i === dices[key].edges) return `<span class="_luck">${i}</span>`;
+    else return i;
+  });
+  resultSumNode.innerHTML = "(" + result.join(" + ") + ")";
+}
 
 // Блок с отображением изображений добавленных кубиков
 const dicesContainerNode = document.querySelector(".dices");
-let dices = [];
 function renderDicesImages() {
   // При отсутствии кубиков
   dicesContainerNode.classList[dices.length === 0 ? "add" : "remove"]("_empty");
