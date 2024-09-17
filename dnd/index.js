@@ -85,17 +85,17 @@ function renderDicesQuantityText() {
   // Добавляем коэффициенты при одинаковых кубиках
   const result = [];
   dices.forEach((dice) => {
-    const diceName = "d" + dice.edges;
+    // const diceName = "d" + dice.edges;
 
-    const addedDice = result.find((dice) => dice.includes(diceName));
+    // const addedDice = result.find((dice) => "d" + dice.edges === diceName);
 
-    if (addedDice) {
-      const coeffText = addedDice.match(/<b>(\d+)<\/b>/);
-      const coeff = coeffText ? Number(coeffText[1]) + 1 : 2;
-      result[result.indexOf(addedDice)] = `<b>${coeff}</b>${diceName}`;
-    } else {
-      result.push(diceName);
-    }
+    // if (addedDice) {
+    //   const coeffText = addedDice.match(/<b>(\d+)<\/b>/);
+    //   const coeff = coeffText ? Number(coeffText[1]) + 1 : 2;
+    //   result[result.indexOf(addedDice)] = `<b>${coeff}</b>${diceName}`;
+    // } else {
+    // }
+    result.push("d" + dice.edges);
   });
 
   diceTowerTextNode.innerHTML = result.join(" + ");

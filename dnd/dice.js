@@ -43,6 +43,8 @@ export default class Dice {
   };
 
   animate() {
-    this.node.animate([{ rotate: "0deg" }, { rotate: "360deg" }], { duration: this.ANIMATION_DURATION, easing: "ease-out" });
+    const animationStartPos = { transform: "rotate(0)" };
+    const animationEndPos = { transform: `rotate${this.edges === 2 ? "X" : ""}(360deg)` };
+    this.node.animate([animationStartPos, animationEndPos], { duration: this.ANIMATION_DURATION, easing: "ease-out" });
   }
 }
