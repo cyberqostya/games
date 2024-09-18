@@ -98,10 +98,11 @@ img {
 .result._empty {
   font-size: 16px;
 }
-.result._empty:before {
+.result._empty::before {
   content: "{результат}";
   font-style: italic;
   color: var(--color-gray-200);
+  touch-action: manipulation;
 }
 
 .result__sum {
@@ -128,9 +129,10 @@ img {
   flex-direction: column;
   font-style: italic;
 }
-.dices._empty:before {
+.dices._empty::before {
   content: "{кубики}";
   color: var(--color-gray-200);
+  touch-action: manipulation;
 }
 .dices._disabled {
   pointer-events: none;
@@ -223,4 +225,5 @@ img {
   font-size: 14px;
   flex-shrink: 0;
   min-width: 45px;
+  touch-action: manipulation;
 }

@@ -44,31 +44,34 @@ export default class Dice {
     // return this._getRandomEdge();
   };
 
+  // 1
   animationRoll() {
     this.node.animate([{ transform: "rotate(0)" }, { transform: "rotate(360deg)" }], {
       duration: this.ANIMATION_DURATION,
       easing: "ease-out",
     });
   }
+  // 2
   async animationFlip() {
     this.node.animate([{ translate: "0 0" }, { translate: "0 15%" }, { translate: "0 -15%" }], {
-      duration: this.ANIMATION_DURATION,
+      duration: this.ANIMATION_DURATION * 0.5,
       easing: "ease",
       fill: "forwards",
     });
-    await new Promise((res) => setTimeout(res, this.ANIMATION_DURATION / 2));
+    await new Promise((res) => setTimeout(res, this.ANIMATION_DURATION * 0.3));
     this.node.animate([{ transform: "rotateX(0)" }, { transform: "rotateX(-360deg)" }], {
-      duration: this.ANIMATION_DURATION * 1.5,
+      duration: this.ANIMATION_DURATION * 0.7,
       easing: "ease",
       fill: "forwards",
     });
-    await new Promise((res) => setTimeout(res, this.ANIMATION_DURATION / 2));
+    await new Promise((res) => setTimeout(res, this.ANIMATION_DURATION * 0.4));
     this.node.animate([{ translate: "0 -15%" }, { translate: "0 0" }], {
-      duration: this.ANIMATION_DURATION,
+      duration: this.ANIMATION_DURATION * 0.5,
       easing: "ease",
       fill: "forwards",
     });
   }
+  // главная анимация
   animate() {
     if (this.edges === 2) {
       this.animationFlip();
