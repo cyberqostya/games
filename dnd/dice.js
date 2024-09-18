@@ -1,11 +1,13 @@
 export default class Dice {
   ANIMATION_DURATION = 600;
   SUCCESS_MODIFIER = 0.75;
+  FAILURE_MODIFIER = 0.25;
 
   constructor(edges) {
     this.edges = edges;
     this.node;
     this.MIN_SUCCESS_ROLL = Math.ceil(this.SUCCESS_MODIFIER * edges);
+    this.MAX_FAILURE_ROLL = Math.ceil(this.FAILURE_MODIFIER * edges);
 
     this.createNode();
   }
@@ -31,10 +33,10 @@ export default class Dice {
     // Кармический бросок
     if (karmaCounter !== undefined) {
       if (karmaCounter > 2 && Math.random() > 0.7 - karmaCounter / 10) {
-        // console.log("КАРМА", karmaCounter);
+        console.log("КАРМА", karmaCounter);
         return this._getKarmaEdge();
       } else {
-        // console.log("обычный бросок", karmaCounter);
+        console.log("обычный бросок", karmaCounter);
         return this._getRandomEdge();
       }
     }

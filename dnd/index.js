@@ -60,10 +60,12 @@ dicesContainerNode.addEventListener("click", async (e) => {
     results.push(result);
 
     // Карма
-    if (result < dice.MIN_SUCCESS_ROLL) {
-      karmaCounter++;
-    } else {
+    if (result <= dice.MAX_FAILURE_ROLL) {
+      karmaCounter += 1;
+    } else if (result >= dice.MIN_SUCCESS_ROLL) {
       karmaCounter = 0;
+    } else {
+      karmaCounter += 0.5;
     }
 
     await new Promise((res) => setTimeout(res, 300));
