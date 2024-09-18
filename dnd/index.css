@@ -9,6 +9,10 @@
   src: url("./fonts/OpenSans-Medium.woff2") format("woff2");
 }
 
+* {
+  user-select: none;
+}
+
 body {
   --color-back: #ebe5d0;
   --color-back-second: #f3f1db;

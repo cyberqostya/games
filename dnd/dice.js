@@ -44,9 +44,36 @@ export default class Dice {
     // return this._getRandomEdge();
   };
 
+  animationRoll() {
+    this.node.animate([{ transform: "rotate(0)" }, { transform: "rotate(360deg)" }], {
+      duration: this.ANIMATION_DURATION,
+      easing: "ease-out",
+    });
+  }
+  async animationFlip() {
+    this.node.animate([{ translate: "0 0" }, { translate: "0 15%" }, { translate: "0 -15%" }], {
+      duration: this.ANIMATION_DURATION,
+      easing: "ease",
+      fill: "forwards",
+    });
+    await new Promise((res) => setTimeout(res, this.ANIMATION_DURATION / 2));
+    this.node.animate([{ transform: "rotateX(0)" }, { transform: "rotateX(-360deg)" }], {
+      duration: this.ANIMATION_DURATION * 1.5,
+      easing: "ease",
+      fill: "forwards",
+    });
+    await new Promise((res) => setTimeout(res, this.ANIMATION_DURATION / 2));
+    this.node.animate([{ translate: "0 -15%" }, { translate: "0 0" }], {
+      duration: this.ANIMATION_DURATION,
+      easing: "ease",
+      fill: "forwards",
+    });
+  }
   animate() {
-    const animationStartPos = { transform: "rotate(0)" };
-    const animationEndPos = { transform: `rotate${this.edges === 2 ? "X" : ""}(360deg)` };
-    this.node.animate([animationStartPos, animationEndPos], { duration: this.ANIMATION_DURATION, easing: "ease-out" });
+    if (this.edges === 2) {
+      this.animationFlip();
+    } else {
+      this.animationRoll();
+    }
   }
 }

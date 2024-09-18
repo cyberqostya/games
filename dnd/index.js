@@ -50,6 +50,7 @@ function renderDicesImages() {
 // ROLL
 dicesContainerNode.addEventListener("click", async (e) => {
   if (e.target.classList.contains("_empty")) return;
+  console.log(123);
 
   dicesContainerNode.classList.add("_disabled");
 
