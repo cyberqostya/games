@@ -50,8 +50,6 @@ function renderDicesImages() {
 }
 // ROLL
 dicesContainerNode.addEventListener("click", async (e) => {
-  if (e.target.classList.contains("_empty")) return;
-
   mainNode.classList.add("_disabled");
 
   const results = [];
@@ -83,7 +81,7 @@ dicesContainerNode.addEventListener("click", async (e) => {
 const diceTowerNode = document.querySelector(".dice-tower");
 const diceTowerTextNode = diceTowerNode.querySelector(".dice-tower__text");
 function renderDicesQuantityText() {
-  diceTowerNode.classList[dices.length > 0 ? "add" : "remove"]("_active");
+  diceTowerNode.classList[dices.length > 0 ? "remove" : "add"]("_empty");
 
   // Добавляем коэффициенты при одинаковых кубиках
   const result = [];

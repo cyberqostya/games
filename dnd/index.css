@@ -98,14 +98,8 @@ img {
   font-size: 100px;
   word-spacing: 1;
 }
-.result._empty {
-  font-size: 16px;
-}
 .result._empty::before {
   content: "{результат}";
-  font-style: italic;
-  color: var(--color-gray-200);
-  touch-action: manipulation;
 }
 
 .result__sum {
@@ -130,12 +124,10 @@ img {
 
 .dices._empty {
   flex-direction: column;
-  font-style: italic;
+  pointer-events: none;
 }
 .dices._empty::before {
   content: "{кубики}";
-  color: var(--color-gray-200);
-  touch-action: manipulation;
 }
 
 .dice {
@@ -186,12 +178,21 @@ img {
   justify-content: space-between;
   gap: 10px;
 
-  opacity: 0;
+  pointer-events: all;
 }
 
-.dice-tower._active {
-  opacity: 1;
-  transition: opacity 0.4s;
+.dice-tower._empty {
+  pointer-events: none;
+  background-color: transparent;
+}
+.dice-tower._empty::before {
+  content: "{сброс}";
+}
+.dice-tower._empty img {
+  display: none;
+}
+.dice-tower._empty .dice-tower__text {
+  display: none;
 }
 
 .dice-tower b {
@@ -199,11 +200,16 @@ img {
   text-decoration: underline;
 }
 
+.dice-tower__text {
+  display: block;
+}
+
 .dice-tower img {
   width: 10px;
   border-radius: 50%;
   background-color: var(--color-back);
   padding: 4px;
+  display: block;
 }
 
 .add-buttons {
@@ -226,6 +232,14 @@ img {
   flex-shrink: 0;
   min-width: 45px;
   touch-action: manipulation;
+}
+
+._empty {
+  font-style: italic;
+  color: var(--color-gray-200);
+  touch-action: manipulation;
+  font-size: 16px;
+  line-height: 18px;
 }
 
 @media (min-width: 600px) {
