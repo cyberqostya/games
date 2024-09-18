@@ -44,6 +44,11 @@ button {
   font-weight: inherit;
   font-size: inherit;
   color: inherit;
+  cursor: pointer;
+}
+
+[role="button"] {
+  cursor: pointer;
 }
 
 span,
@@ -75,10 +80,8 @@ img {
   justify-content: space-between;
   flex-direction: column;
 }
-@media (min-width: 600px) {
-  .main {
-    display: none;
-  }
+.main._disabled {
+  pointer-events: none;
 }
 
 .result__wrapper {
@@ -133,9 +136,6 @@ img {
   content: "{кубики}";
   color: var(--color-gray-200);
   touch-action: manipulation;
-}
-.dices._disabled {
-  pointer-events: none;
 }
 
 .dice {
@@ -226,4 +226,21 @@ img {
   flex-shrink: 0;
   min-width: 45px;
   touch-action: manipulation;
+}
+
+@media (min-width: 600px) {
+  .main {
+    max-width: 600px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 1px dashed var(--color-gray-100);
+  }
+
+  .add-buttons {
+    justify-content: center;
+  }
+
+  .add-buttons {
+    overflow-x: auto;
+  }
 }

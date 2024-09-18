@@ -2,6 +2,7 @@ import Dice from "./dice.js";
 
 // Переменные
 let dices = [];
+const mainNode = document.querySelector(".main");
 
 // Карма
 let karmaCounter = 0;
@@ -50,9 +51,8 @@ function renderDicesImages() {
 // ROLL
 dicesContainerNode.addEventListener("click", async (e) => {
   if (e.target.classList.contains("_empty")) return;
-  console.log(123);
 
-  dicesContainerNode.classList.add("_disabled");
+  mainNode.classList.add("_disabled");
 
   const results = [];
   for (let i = 0; i < dices.length; i++) {
@@ -76,7 +76,7 @@ dicesContainerNode.addEventListener("click", async (e) => {
   resultValues = results;
   renderResultText();
 
-  dicesContainerNode.classList.remove("_disabled");
+  mainNode.classList.remove("_disabled");
 });
 
 // Блок с отображением количества добавленных кубиков
