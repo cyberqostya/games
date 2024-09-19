@@ -1,0 +1,65 @@
+@font-face {
+  font-family: 'west';
+  src: url(./fonts/west.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'west';
+  box-sizing: border-box;
+}
+
+body {
+  background-image: url(./images/bg.jpg);
+  background-color: rgba(0,0,0,.1);
+  background-blend-mode: multiply;
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  background-position: center;
+}
+
+.cards__container {
+  margin: 20px auto;
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fill, 112px);
+  grid-gap: 6px;
+}
+
+/* Общие */
+
+.cards__title {
+  font-size: 40px;
+  padding: 5px;
+}
+
+.cards__card {
+  width: 112px;
+  border-width: 6px;
+  border-style: solid;
+  position: relative;
+}
+
+.cards__image {
+  width: 100px;
+  height: 100%;
+}
+
+
+
+/* Частные */
+
+.cards__title_blue {
+  background: #69c;
+}
+.cards__card_blue {
+  border-color: #69c;
+}
+
+.cards__title_light {
+  background: #c93;
+}
+.cards__card_light {
+  border-color:#c93;
+}
