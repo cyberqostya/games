@@ -8,6 +8,11 @@
   font-weight: 500;
   src: url("./fonts/OpenSans-Medium.woff2") format("woff2");
 }
+@font-face {
+  font-family: "Jaini";
+  font-weight: 500;
+  src: url("./fonts/JainiPurva-Regular.woff2") format("woff2");
+}
 
 * {
   user-select: none;
@@ -112,12 +117,15 @@ img {
 }
 
 .result {
-  font-size: 100px;
+  font-size: 120px;
   word-spacing: 1;
   pointer-events: none;
 }
+.result:not(._empty) {
+  font-family: "Jaini", Arial, Helvetica, sans-serif;
+}
 .result._empty::before {
-  content: "{результат}";
+  content: "{result}";
 }
 
 .result__sum {
@@ -145,7 +153,7 @@ img {
   pointer-events: none;
 }
 .dices._empty::before {
-  content: "{кубики}";
+  content: "{dices}";
 }
 
 .dice {
@@ -204,7 +212,7 @@ img {
   background-color: transparent;
 }
 .dice-tower._empty::before {
-  content: "{сброс}";
+  content: "{reset}";
 }
 .dice-tower._empty img {
   display: none;
@@ -259,7 +267,7 @@ img {
   -webkit-tap-highlight-color: transparent;
 }
 .add-buttons__button._deactive {
-  box-shadow: inset 0 0 0 1px var(--color-gray-100);
+  box-shadow: inset 0 0 0 2px var(--color-gray-100);
   background-color: transparent;
 }
 

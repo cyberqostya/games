@@ -2,6 +2,8 @@ export default class Dice {
   ANIMATION_DURATION = 600;
   SUCCESS_MODIFIER = 0.75;
   FAILURE_MODIFIER = 0.25;
+  ROLL_SOUNDS = ["./sounds/roll1.mp3", "./sounds/roll2.mp3", "./sounds/roll3.mp3", "./sounds/roll4.mp3"];
+  COIN_SOUND = "./sounds/coin.mp3";
 
   constructor(edges) {
     this.edges = edges;
@@ -9,7 +11,10 @@ export default class Dice {
     this.MIN_SUCCESS_ROLL = Math.ceil(this.SUCCESS_MODIFIER * edges);
     this.MAX_FAILURE_ROLL = Math.ceil(this.FAILURE_MODIFIER * edges);
 
+    this.buffer;
+
     this.createNode();
+    this.initSound();
   }
 
   createNode() {
@@ -29,6 +34,7 @@ export default class Dice {
   _getKarmaEdge = () => this.MIN_SUCCESS_ROLL + Math.round(Math.random() * (this.edges - this.MIN_SUCCESS_ROLL));
   roll = (karmaCounter) => {
     this.animate();
+    this.playSound();
 
     // Кармический бросок
     if (karmaCounter !== undefined) {
@@ -78,5 +84,32 @@ export default class Dice {
     } else {
       this.animationRoll();
     }
+  }
+
+  // Звук
+  async initSound() {
+    // Создание контекста при первом создании кубика
+    // Чтобы избежать ошибки, пока юзер не совершил событие
+    // А также контекст один на все приложение для оптимальной работы
+    if (window.audioCtx === undefined) window.audioCtx = new AudioContext();
+
+    // Отдельный звук для монетки
+    let soundLink;
+    if (this.edges === 2) {
+      soundLink = this.COIN_SOUND;
+    } else {
+      soundLink = this.ROLL_SOUNDS[Math.floor(Math.random() * this.ROLL_SOUNDS.length)];
+    }
+
+    const response = await fetch(soundLink);
+    const arrayBuffer = await response.arrayBuffer();
+    const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+    this.buffer = audioBuffer;
+  }
+  playSound() {
+    const source = audioCtx.createBufferSource();
+    source.buffer = this.buffer;
+    source.connect(audioCtx.destination);
+    source.start();
   }
 }

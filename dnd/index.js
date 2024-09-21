@@ -6,7 +6,6 @@ const banInterface = document.querySelector(".ban-interface");
 
 // Переключатели настроек
 const settings = {};
-
 // Карма
 settings.karma = {
   isActive: true,
@@ -43,7 +42,7 @@ function colorSum() {
     else if (i === dices[key].edges) return `<span class="_luck">${i}</span>`;
     else return i;
   });
-  resultSumNode.innerHTML = "(" + result.join(" + ") + ")";
+  resultSumNode.innerHTML = "〔" + result.join(" + ") + "〕";
 }
 
 // Блок с отображением изображений добавленных кубиков
@@ -62,6 +61,8 @@ function renderDicesImages() {
 // ROLL
 dicesContainerNode.addEventListener("click", async (e) => {
   banInterface.classList.add("_disabled");
+
+  resetResult();
 
   const results = [];
   for (let i = 0; i < dices.length; i++) {
@@ -86,7 +87,7 @@ dicesContainerNode.addEventListener("click", async (e) => {
     await new Promise((res) => setTimeout(res, 300));
   }
 
-  await new Promise((res) => setTimeout(res, 300));
+  await new Promise((res) => setTimeout(res, 100));
   resultValues = results;
   renderResultText();
 
