@@ -18,32 +18,32 @@ settings.karma = {
 };
 
 // Блок с отображением результата бросков
-const resultSumNode = document.querySelector(".result__sum");
+// const resultSumNode = document.querySelector(".result__sum");
 const resultNode = document.querySelector(".result");
 let resultValues = [];
 function renderResultText() {
   if (resultValues.length === 0) {
     resultNode.classList.add("_empty");
     resultNode.textContent = "";
-    resultSumNode.textContent = "";
-  } else {
+    // resultSumNode.textContent = "";
+  } else if (resultValues.length > 1) {
     resultNode.classList.remove("_empty");
     resultNode.textContent = resultValues.reduce((acc, i) => acc + i, 0);
-    if (resultValues.length !== 1) colorSum();
+    // if (resultValues.length !== 1) colorSum();
   }
 }
 function resetResult() {
   resultValues = [];
   renderResultText();
 }
-function colorSum() {
-  const result = resultValues.map((i, key) => {
-    if (i === 1) return `<span class="_unluck">${i}</span>`;
-    else if (i === dices[key].edges) return `<span class="_luck">${i}</span>`;
-    else return i;
-  });
-  resultSumNode.innerHTML = "〔" + result.join(" + ") + "〕";
-}
+// function colorSum() {
+//   const result = resultValues.map((i, key) => {
+//     if (i === 1) return `<span class="_unluck">${i}</span>`;
+//     else if (i === dices[key].edges) return `<span class="_luck">${i}</span>`;
+//     else return i;
+//   });
+//   resultSumNode.innerHTML = "〔" + result.join(" + ") + "〕";
+// }
 
 // Блок с отображением изображений добавленных кубиков
 const dicesContainerNode = document.querySelector(".dices");
@@ -51,18 +51,19 @@ function renderDicesImages() {
   // При отсутствии кубиков
   dicesContainerNode.classList[dices.length === 0 ? "add" : "remove"]("_empty");
   dicesContainerNode.classList[dices.length > 4 ? "add" : "remove"]("_medium");
-  dicesContainerNode.classList[dices.length > 10 ? "add" : "remove"]("_small");
+  dicesContainerNode.classList[dices.length > 12 ? "add" : "remove"]("_small");
 
   dicesContainerNode.innerHTML = "";
-  dices.forEach((dice) => {
-    dicesContainerNode.insertAdjacentElement("beforeend", dice.node);
-  });
+  dices.forEach((dice) => dicesContainerNode.insertAdjacentElement("beforeend", dice.node));
+  dices.forEach((dice) => dice.setResultFontSize());
 }
 // ROLL
 dicesContainerNode.addEventListener("click", async (e) => {
   banInterface.classList.add("_disabled");
 
   resetResult();
+
+  dices.forEach((dice) => dice.hideResult());
 
   const results = [];
   for (let i = 0; i < dices.length; i++) {
@@ -84,10 +85,10 @@ dicesContainerNode.addEventListener("click", async (e) => {
     }
     // console.log("счетчик кармы стал:", settings.karma.counter);
 
-    await new Promise((res) => setTimeout(res, 300));
+    await new Promise((res) => setTimeout(res, 100));
   }
 
-  await new Promise((res) => setTimeout(res, 100));
+  await new Promise((res) => setTimeout(res, dices[0].ANIMATION_DURATION * 1.2));
   resultValues = results;
   renderResultText();
 
@@ -101,7 +102,7 @@ function renderDicesQuantityText() {
   diceTowerNode.classList[dices.length > 0 ? "remove" : "add"]("_empty");
 
   // Добавляем коэффициенты при одинаковых кубиках
-  diceTowerTextNode.innerHTML = dices.map((i) => "d" + i.edges).join(" + ");
+  diceTowerTextNode.innerHTML = dices.map((i) => "d" + i.edges).join("&nbsp;+ ");
 }
 function resetDices() {
   dices = [];
