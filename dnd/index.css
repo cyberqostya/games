@@ -99,11 +99,22 @@ img {
   justify-content: center;
   flex-direction: column;
   border-bottom: 1px dashed var(--color-gray-100);
+  position: relative;
+}
+
+.luck {
+  position: absolute;
+  width: 70px;
+  aspect-ratio: 1;
+  top: 0;
+  left: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .result {
   font-size: 100px;
   word-spacing: 1;
+  pointer-events: none;
 }
 .result._empty::before {
   content: "{результат}";
@@ -233,12 +244,23 @@ img {
 .add-buttons__button {
   padding: 5px 10px;
   background-color: var(--color-gray-100);
-  border-radius: 5px;
+  border-radius: 6px;
   color: var(--color-black-100);
   font-size: 14px;
   flex-shrink: 0;
   min-width: 45px;
   touch-action: manipulation;
+
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.add-buttons__button[data-settings] {
+  -webkit-tap-highlight-color: transparent;
+}
+.add-buttons__button._deactive {
+  box-shadow: inset 0 0 0 1px var(--color-gray-100);
+  background-color: transparent;
 }
 
 ._empty {

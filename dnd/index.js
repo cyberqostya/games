@@ -4,8 +4,19 @@ import Dice from "./dice.js";
 let dices = [];
 const banInterface = document.querySelector(".ban-interface");
 
+// Переключатели настроек
+const settings = {};
+
 // Карма
-let karmaCounter = 0;
+settings.karma = {
+  isActive: true,
+  counter: 0,
+
+  toggle() {
+    this.isActive = !this.isActive;
+    this.counter = 0;
+  },
+};
 
 // Блок с отображением результата бросков
 const resultSumNode = document.querySelector(".result__sum");
@@ -55,17 +66,22 @@ dicesContainerNode.addEventListener("click", async (e) => {
   const results = [];
   for (let i = 0; i < dices.length; i++) {
     const dice = dices[i];
-    const result = dice.roll(karmaCounter);
+    const result = dice.roll(settings.karma.counter);
     results.push(result);
 
     // Карма
-    if (result <= dice.MAX_FAILURE_ROLL) {
-      karmaCounter += 1;
-    } else if (result >= dice.MIN_SUCCESS_ROLL) {
-      karmaCounter = 0;
+    if (settings.karma.isActive) {
+      if (result <= dice.MAX_FAILURE_ROLL) {
+        settings.karma.counter += 1;
+      } else if (result >= dice.MIN_SUCCESS_ROLL) {
+        settings.karma.counter = 0;
+      } else {
+        settings.karma.counter += 0.5;
+      }
     } else {
-      karmaCounter += 0.5;
+      settings.karma.counter = 0;
     }
+    // console.log("счетчик кармы стал:", settings.karma.counter);
 
     await new Promise((res) => setTimeout(res, 300));
   }
@@ -84,22 +100,7 @@ function renderDicesQuantityText() {
   diceTowerNode.classList[dices.length > 0 ? "remove" : "add"]("_empty");
 
   // Добавляем коэффициенты при одинаковых кубиках
-  const result = [];
-  dices.forEach((dice) => {
-    // const diceName = "d" + dice.edges;
-
-    // const addedDice = result.find((dice) => "d" + dice.edges === diceName);
-
-    // if (addedDice) {
-    //   const coeffText = addedDice.match(/<b>(\d+)<\/b>/);
-    //   const coeff = coeffText ? Number(coeffText[1]) + 1 : 2;
-    //   result[result.indexOf(addedDice)] = `<b>${coeff}</b>${diceName}`;
-    // } else {
-    // }
-    result.push("d" + dice.edges);
-  });
-
-  diceTowerTextNode.innerHTML = result.join(" + ");
+  diceTowerTextNode.innerHTML = dices.map((i) => "d" + i.edges).join(" + ");
 }
 function resetDices() {
   dices = [];
@@ -114,12 +115,24 @@ function render() {
   renderDicesQuantityText();
 }
 
+// GetLucky
+document.querySelector(".luck").addEventListener("click", () => (settings.karma.counter = 7));
+
 // Кнопки добавления кубиков
 const addButtonsNode = document.querySelector(".add-buttons");
 addButtonsNode.addEventListener("click", (e) => {
   const buttonNode = e.target.closest(".add-buttons__button");
+  // Нажали ли на кнопку
   if (!buttonNode) return;
 
+  // Если нажали на кнопку настроек
+  if (buttonNode.dataset.settings) {
+    settings[buttonNode.dataset.settings].toggle();
+    buttonNode.classList[settings[buttonNode.dataset.settings].isActive ? "remove" : "add"]("_deactive");
+    return;
+  }
+
+  // Если нажали на кнопку с наименованием кубиков [d10]
   const edges = Number(buttonNode.textContent.match(/\d+/g)[0]);
   dices.push(new Dice(edges));
 
