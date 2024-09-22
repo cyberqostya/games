@@ -120,6 +120,7 @@ export default class Dice {
     // Чтобы избежать ошибки, пока юзер не совершил событие
     // А также контекст один на все приложение для оптимальной работы
     if (window.audioCtx === undefined) window.audioCtx = new AudioContext();
+    if (audioCtx.state === "suspended") audioCtx.resume();
 
     // Отдельный звук для монетки
     let soundLink;
