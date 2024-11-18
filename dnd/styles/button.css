@@ -1,0 +1,31 @@
+.button {
+  /* padding: 5px 10px; */
+  padding: 10px;
+  border-radius: 6px;
+
+  font-size: 14px;
+  flex-shrink: 0;
+  touch-action: manipulation;
+
+  box-sizing: border-box;
+  overflow: hidden;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+.button._dice {
+  background-color: var(--color-gray-100);
+  color: var(--color-black-100);
+
+  min-width: 45px;
+}
+
+.button._settings {
+  background-color: var(--color-gold);
+  color: #fff;
+  letter-spacing: -1px;
+  opacity: 0.3;
+}
+.button._settings._active {
+  opacity: 1;
+}

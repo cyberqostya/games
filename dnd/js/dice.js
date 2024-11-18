@@ -1,3 +1,5 @@
+import getMathSign from "./helpers.js";
+
 export default class Dice {
   ANIMATION_DURATION = 600;
   SUCCESS_MODIFIER = 0.75;
@@ -9,10 +11,13 @@ export default class Dice {
     this.edges = edges;
     this.node;
     this.resultNode;
+    this.crossNode;
     this.MIN_SUCCESS_ROLL = Math.ceil(this.SUCCESS_MODIFIER * edges);
     this.MAX_FAILURE_ROLL = Math.ceil(this.FAILURE_MODIFIER * edges);
 
     this.buffer;
+
+    this.shakeAnimationID;
 
     this.createNode();
     this.initSound();
@@ -31,8 +36,13 @@ export default class Dice {
     result.classList.add("dice__result");
     this.resultNode = result;
 
+    const cross = document.createElement("button");
+    cross.classList.add("cross", "_dark", "dice__cross");
+    this.crossNode = cross;
+
     div.appendChild(img);
     div.appendChild(result);
+    div.appendChild(cross);
     this.node = div;
   }
 
@@ -61,6 +71,8 @@ export default class Dice {
     return result;
   };
 
+  // ===== Анимации текста результата =====
+
   showResult = (result) => {
     this.resultNode.textContent = result;
     this.resultNode.classList.add("_active");
@@ -75,8 +87,10 @@ export default class Dice {
     this.node.classList.remove("_blured");
   }
   setResultFontSize() {
-    this.resultNode.style.fontSize = Math.round(this.node.clientHeight * 0.7) + "px";
+    this.node.style.fontSize = Math.round(this.node.clientHeight * 0.7) + "px";
   }
+
+  // ===== Анимации броска =====
 
   // 1
   animationRoll() {
@@ -114,7 +128,8 @@ export default class Dice {
     }
   }
 
-  // Звук
+  // ===== Звук броска =====
+
   async initSound() {
     // Создание контекста при первом создании кубика
     // Чтобы избежать ошибки, пока юзер не совершил событие
@@ -141,4 +156,49 @@ export default class Dice {
     source.connect(audioCtx.destination);
     source.start();
   }
+
+  // ===== Редактирование =====
+
+  editModeSwitcher(mode) {
+    this.switchCross(mode);
+    this.switchShake(mode);
+  }
+
+  switchCross(mode) {
+    this.crossNode.classList[mode ? "add" : "remove"]("_active");
+  }
+
+  // ===== Тряска при удалении =====
+
+  sign = getMathSign(); // Постоянный знак для поддержания плюса в начале и минусы в конце (и наоборот)
+  MAX_DELTA_SHAKE_POSITION = 0.7;
+  START_SHAKE_POSITION = 1;
+  END_SHAKE_POSITION = -1.5;
+  RANDOM_DELTA_SHAKE_START = Math.random() * this.MAX_DELTA_SHAKE_POSITION * getMathSign();
+  RANDOM_DELTA_SHAKE_END = Math.random() * this.MAX_DELTA_SHAKE_POSITION * getMathSign();
+  startShakePositivePosition = this.START_SHAKE_POSITION * this.sign + this.RANDOM_DELTA_SHAKE_START;
+  endShakeNegativePosition = this.END_SHAKE_POSITION * this.sign + this.RANDOM_DELTA_SHAKE_END;
+  RANDOM_SHAKE_DURATION = 150 + Math.round(Math.random() * 100);
+
+  switchShake = (mode) => {
+    if (mode) {
+      this.shakeAnimationID = this.node.animate(
+        [
+          { transform: `translate(0, 0) rotate(0deg)` },
+          { transform: `translate(${this.endShakeNegativePosition}px, 0) rotate(${this.startShakePositivePosition}deg)` },
+          { transform: `translate(0, ${this.startShakePositivePosition}px) rotate(${this.endShakeNegativePosition}deg)` },
+          { transform: `translate(0, 0) rotate(0deg)` },
+        ],
+        {
+          duration: this.RANDOM_SHAKE_DURATION,
+          iterations: Infinity,
+          easing: "linear",
+        }
+      );
+    } else {
+      this.shakeAnimationID.cancel();
+    }
+  };
+
+  // ===== Удаление =====
 }

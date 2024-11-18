@@ -1,34 +1,60 @@
 import Dice from "./js/dice.js";
+import SettingsButton from "./js/settingsButton.js";
 import Total from "./js/total.js";
 
-// Переменные
-let dices = [];
-const banInterface = document.querySelector(".ban-interface");
+// ===== Переменные =====
 
-// Переключатели настроек
-const settings = {};
-// Карма
-settings.karma = {
-  isActive: true,
-  counter: 0,
+let dices = []; // Классы кубиков
+const banInterfaceNode = document.querySelector(".ban-interface"); // Блокировщик интерфейса против нажатий при выполнении вычислений
+const total = new Total(); // Сумма всех бросков
+const dicesContainerNode = document.querySelector(".dices"); // Контейнер, где крутятся кубики
+const MAX_DICES_QUANTITY = 25;
 
-  toggle() {
-    this.isActive = !this.isActive;
-    this.counter = 0;
+// ===== Настройки =====
+// kostya Меняются стейты в html и в js вместе
+
+window.settings = {
+  // Карма
+  karma: {
+    counter: 0,
+    button: new SettingsButton({
+      isActive: true,
+      title: "KARMA",
+      callback: () => {
+        settings.karma.counter = 0;
+        resetDices();
+      },
+    }),
+  },
+  // Редактирование
+  edit: {
+    button: new SettingsButton({
+      isActive: false,
+      title: "EDIT",
+      callback: () => {
+        dices.forEach((dice) => dice.editModeSwitcher(settings.edit.button.isActive));
+
+        if (settings.edit.button.isActive) {
+          window.addEventListener("click", deleteDice, true);
+        } else {
+          window.removeEventListener("click", deleteDice, true);
+        }
+      },
+    }),
   },
 };
 
-// Сумма всех бросков
-const total = new Total();
+// ===== Визуал кубиков =====
 
-//
-//
-// Чертежи
-const dicesContainerNode = document.querySelector(".dices");
 function renderDicesImages() {
   dicesContainerNode.classList[dices.length === 0 ? "add" : "remove"]("_empty"); // Пусто
-  dicesContainerNode.classList[dices.length > 4 ? "add" : "remove"]("_medium"); // 4-12
-  dicesContainerNode.classList[dices.length > 12 ? "add" : "remove"]("_small"); // 12+
+  dicesContainerNode.classList[dices.length === 2 ? "add" : "remove"]("_xs"); // 2
+  dicesContainerNode.classList[dices.length >= 3 && dices.length <= 4 ? "add" : "remove"]("_s"); // 3-4
+  dicesContainerNode.classList[dices.length >= 5 && dices.length <= 6 ? "add" : "remove"]("_m"); // 5-6
+  dicesContainerNode.classList[dices.length >= 7 && dices.length <= 9 ? "add" : "remove"]("_l"); // 7-9
+  dicesContainerNode.classList[dices.length >= 10 && dices.length <= 12 ? "add" : "remove"]("_xl"); // 10-12
+  dicesContainerNode.classList[dices.length >= 13 && dices.length <= 16 ? "add" : "remove"]("_xxl"); // 13-16
+  dicesContainerNode.classList[dices.length >= 17 ? "add" : "remove"]("_xxxl"); // 17
 
   dicesContainerNode.innerHTML = "";
   dices.forEach((dice) => dicesContainerNode.insertAdjacentElement("beforeend", dice.node));
@@ -36,15 +62,11 @@ function renderDicesImages() {
   // Только после добавления всех кубиков просчитываем высоту шрифта относительно их размера
   dices.forEach((dice) => dice.setResultFontSize());
 }
-//
-//
-//
 
-//
-//
-// ROLL
+// ===== Бросок =====
+
 dicesContainerNode.addEventListener("click", async () => {
-  banInterface.classList.add("_disabled");
+  banInterfaceNode.classList.add("_disabled");
 
   total.reset(); // Общий результат
   dices.forEach((dice) => dice.hideResult()); // Результат каждого кубика
@@ -56,7 +78,7 @@ dicesContainerNode.addEventListener("click", async () => {
     results.push(result);
 
     // Карма
-    if (settings.karma.isActive) {
+    if (settings.karma.button.isActive) {
       if (result <= dice.MAX_FAILURE_ROLL) {
         settings.karma.counter += 1;
       } else if (result >= dice.MIN_SUCCESS_ROLL) {
@@ -67,7 +89,6 @@ dicesContainerNode.addEventListener("click", async () => {
     } else {
       settings.karma.counter = 0;
     }
-    // console.log("счетчик кармы стал:", settings.karma.counter);
 
     await new Promise((res) => setTimeout(res, 100));
   }
@@ -76,30 +97,57 @@ dicesContainerNode.addEventListener("click", async () => {
   total.set(results);
   await new Promise((res) => setTimeout(res, 400));
 
-  banInterface.classList.remove("_disabled");
+  banInterfaceNode.classList.remove("_disabled");
 });
-//
-//
-//
 
-//
-//
-// Кнопка Сброса
+// ===== Удачный бросок =====
+
+let luckCounter = 0;
+const TAPS_TO_LUCK = 3;
+const TAPS_RESET_TIME = 500;
+let luckTimerId = 0;
+const luckButton = document.querySelector(".total");
+const luckMarker = document.querySelector(".total__placeholder");
+luckButton.addEventListener("click", () => {
+  if (luckMarker.classList.contains("_active")) {
+    luckCounter++;
+
+    // Таймаут после первого
+    if (luckCounter === 1) {
+      luckTimerId = setTimeout(() => {
+        luckCounter = 0;
+      }, TAPS_RESET_TIME);
+    }
+
+    if (luckCounter >= TAPS_TO_LUCK) {
+      luckCounter = 0;
+      settings.karma.counter = 7;
+      clearTimeout(luckTimerId);
+
+      luckMarker.animate([{ color: "#f0a020" }], {
+        duration: 200,
+        easing: "linear",
+      });
+    }
+  }
+});
+
+// ===== Сброс кубиков =====
+
 const diceTowerNode = document.querySelector(".dice-tower");
 const diceTowerTextNode = diceTowerNode.querySelector(".dice-tower__text");
 function renderDicesQuantityText() {
   diceTowerNode.classList[dices.length > 0 ? "remove" : "add"]("_empty"); // Отображение пустого
   diceTowerTextNode.innerHTML = dices.map((i) => "d" + i.edges).join("&nbsp;+ "); // Текст
 }
-diceTowerNode.addEventListener("click", () => {
+function resetDices() {
   dices = [];
   render();
-});
-//
-//
-//
+}
+diceTowerNode.addEventListener("click", resetDices);
 
-//
+// ===== Рендер =====
+
 function render() {
   // Должно выполняться один раз при добавлении кубика // Оптимизировано
   if (total.dicesValues.length !== 0) {
@@ -110,34 +158,43 @@ function render() {
   renderDicesImages();
   renderDicesQuantityText();
 }
-//
 
-// GetLucky
-document.querySelector(".luck").addEventListener("click", () => (settings.karma.counter = 7));
+// ===== Кнопки добавления кубиков =====
 
-//
-//
-// Кнопки добавления кубиков
-const addButtonsNode = document.querySelector(".add-buttons");
-addButtonsNode.addEventListener("click", (e) => {
-  const buttonNode = e.target.closest(".add-buttons__button");
+const diceButtonsNodes = document.querySelectorAll(".button._dice");
+diceButtonsNodes.forEach((diceButtonNode) => {
+  diceButtonNode.addEventListener("click", function () {
+    // Превышение максимально возможного количества кубиков
+    if (dices.length === MAX_DICES_QUANTITY) return;
 
-  // Нажали ли на кнопку
-  if (!buttonNode) return;
-
-  // Если нажали на кнопку настроек
-  if (buttonNode.dataset.settings) {
-    settings[buttonNode.dataset.settings].toggle();
-    buttonNode.classList[settings[buttonNode.dataset.settings].isActive ? "remove" : "add"]("_deactive");
-    return;
-  }
-
-  // Если нажали на кнопку с наименованием кубиков [d10]
-  const edges = Number(buttonNode.textContent.match(/\d+/g)[0]);
-  dices.push(new Dice(edges));
-
-  render();
+    const edges = Number(this.textContent.match(/\d+/g)[0]);
+    dices.push(new Dice(edges));
+    render();
+  });
 });
-//
-//
-//
+
+// ===== Кнопки настроек =====
+
+Object.keys(settings).forEach((key) => {
+  document.querySelector(".buttons-container._top").insertAdjacentElement("beforeend", settings[key].button.node);
+});
+
+// ===== Удаление кубиков по одному =====
+
+function deleteDice(e) {
+  e.stopPropagation();
+
+  const dice = e.target.closest(".dice");
+
+  if (!dice) return settings.edit.button.toggle();
+
+  const index = Array.from(dicesContainerNode.children).indexOf(dice);
+
+  dices = dices.filter((i, ind) => ind !== index);
+  render();
+
+  // Когда осталось пусто
+  if (dices.length === 0) {
+    settings.edit.button.toggle();
+  }
+}

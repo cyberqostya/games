@@ -10,33 +10,35 @@
   <body>
     <main class="main">
       <!--  -->
+      <div class="buttons-container _top">
+        <!-- <button class="button _settings" data-settings="karma">KARMA</button>
+        <button class="button _settings _disabled" data-settings="edit">EDIT</button> -->
+      </div>
+      <!--  -->
       <div class="total">
         <span class="total__text"></span>
         <span class="total__placeholder _active">{sum}</span>
       </div>
 
-      <div class="luck"></div>
-
       <div class="dices _empty" role="button"></div>
 
       <footer class="footer">
         <div role="button" class="dice-tower _empty">
+          <button class="cross _light"></button>
           <p class="dice-tower__text"></p>
-          <img src="./images/cross.svg" alt="cross" />
+          <button class="cross _light"></button>
         </div>
 
-        <div class="add-buttons">
-          <button class="add-buttons__button">d4</button>
-          <button class="add-buttons__button">d6</button>
-          <button class="add-buttons__button">d8</button>
-          <button class="add-buttons__button">d10</button>
-          <button class="add-buttons__button">d12</button>
-          <button class="add-buttons__button">d20</button>
-          <div>|</div>
-          <button class="add-buttons__button">d2</button>
-          <button class="add-buttons__button">d100</button>
-          <div>|</div>
-          <button class="add-buttons__button" data-settings="karma">karma</button>
+        <div class="buttons-container">
+          <button class="button _dice">d2</button>
+          <button class="button _dice">d4</button>
+          <button class="button _dice">d6</button>
+          <button class="button _dice">d8</button>
+          <button class="button _dice">d10</button>
+          <button class="button _dice">d12</button>
+          <button class="button _dice">d20</button>
+          <button class="button _dice">d100</button>
+          <!-- <div>|</div> -->
         </div>
       </footer>
     </main>
