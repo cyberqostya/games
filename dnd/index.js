@@ -11,7 +11,6 @@ const dicesContainerNode = document.querySelector(".dices"); // Контейне
 const MAX_DICES_QUANTITY = 25;
 
 // ===== Настройки =====
-// kostya Меняются стейты в html и в js вместе
 
 window.settings = {
   // Карма
@@ -58,6 +57,10 @@ function renderDicesImages() {
 
   dicesContainerNode.innerHTML = "";
   dices.forEach((dice) => dicesContainerNode.insertAdjacentElement("beforeend", dice.node));
+  // dices.forEach((dice) => {
+  //   dicesContainerNode.insertAdjacentElement("beforeend", dice.node);
+  //   dice.node.style.width = Math.random() + 17 + "%";
+  // });
 
   // Только после добавления всех кубиков просчитываем высоту шрифта относительно их размера
   dices.forEach((dice) => dice.setResultFontSize());
@@ -185,13 +188,19 @@ function deleteDice(e) {
   e.stopPropagation();
 
   const dice = e.target.closest(".dice");
-
   if (!dice) return settings.edit.button.toggle();
 
   const index = Array.from(dicesContainerNode.children).indexOf(dice);
 
   dices = dices.filter((i, ind) => ind !== index);
+
+  // Лаг на телефоне из-за оптимизации
+  // При удалении класса кубика из массива классов переставала анимация тряски
+  // Которая перерасчитывалась только при изменении ширины кубика в дом дереве
+  // Решение - откл а затем вкл анимации вручную до и после добавления кубиков
+  dices.forEach((i) => i.switchShake(false));
   render();
+  dices.forEach((i) => i.switchShake(true));
 
   // Когда осталось пусто
   if (dices.length === 0) {
