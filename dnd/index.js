@@ -10,6 +10,25 @@ const total = new Total(); // Сумма всех бросков
 const dicesContainerNode = document.querySelector(".dices"); // Контейнер, где крутятся кубики
 const MAX_DICES_QUANTITY = 25;
 
+const diceTowerNode = document.querySelector(".dice-tower"); // Кнопка сброса кубиков
+const diceTowerTextNode = diceTowerNode.querySelector(".dice-tower__text"); // Текст кнопки сброса кубиков (добавленные кубики)
+
+// ===== Вспомогательные функции =====
+
+// Очистка результатов кубиков
+
+function clearResults() {
+  total.reset(); // Общий результат
+  dices.forEach((dice) => dice.hideResult()); // Результат каждого кубика
+}
+
+// Сброс кубиков и результата (очистка всего)
+
+function resetDices() {
+  dices = [];
+  render();
+}
+
 // ===== Настройки =====
 
 window.settings = {
@@ -21,7 +40,7 @@ window.settings = {
       title: "KARMA",
       callback: () => {
         settings.karma.counter = 0;
-        resetDices();
+        clearResults();
       },
     }),
   },
@@ -71,8 +90,7 @@ function renderDicesImages() {
 dicesContainerNode.addEventListener("click", async () => {
   banInterfaceNode.classList.add("_disabled");
 
-  total.reset(); // Общий результат
-  dices.forEach((dice) => dice.hideResult()); // Результат каждого кубика
+  clearResults();
 
   const results = [];
   for (let i = 0; i < dices.length; i++) {
@@ -137,8 +155,6 @@ luckButton.addEventListener("click", () => {
 
 // ===== Сброс кубиков =====
 
-const diceTowerNode = document.querySelector(".dice-tower");
-const diceTowerTextNode = diceTowerNode.querySelector(".dice-tower__text");
 function renderDicesQuantityText() {
   diceTowerNode.classList[dices.length > 0 ? "remove" : "add"]("_empty"); // Отображение пустого
 
@@ -154,20 +170,14 @@ function renderDicesQuantityText() {
 
   diceTowerTextNode.innerHTML = result.map((i) => (i[0] === 1 ? "" : `<b>${i[0]}</b>`) + "d" + i[1]).join("&nbsp;+ ");
 }
-function resetDices() {
-  dices = [];
-  render();
-}
+
 diceTowerNode.addEventListener("click", resetDices);
 
 // ===== Рендер =====
 
 function render() {
   // Должно выполняться один раз при добавлении кубика // Оптимизировано
-  if (total.dicesValues.length !== 0) {
-    total.reset();
-    dices.forEach((dice) => dice.hideResult());
-  }
+  if (total.dicesValues.length !== 0) clearResults();
 
   renderDicesImages();
   renderDicesQuantityText();
