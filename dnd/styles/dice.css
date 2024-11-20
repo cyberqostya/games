@@ -35,6 +35,7 @@
 .dice__result {
   position: absolute;
   inset: 0;
+  bottom: 0.1em;
   display: flex;
   align-items: center;
   justify-content: center;

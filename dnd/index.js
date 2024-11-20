@@ -141,7 +141,18 @@ const diceTowerNode = document.querySelector(".dice-tower");
 const diceTowerTextNode = diceTowerNode.querySelector(".dice-tower__text");
 function renderDicesQuantityText() {
   diceTowerNode.classList[dices.length > 0 ? "remove" : "add"]("_empty"); // Отображение пустого
-  diceTowerTextNode.innerHTML = dices.map((i) => "d" + i.edges).join("&nbsp;+ "); // Текст
+
+  // diceTowerTextNode.innerHTML = dices.map((i) => "d" + i.edges).join("&nbsp;+ "); // Просто текст
+  const result = []; // [[count: edges]] // example: [[1: 6], [3: 4]] // means: [[1: d6], [3: d4]]
+  dices.forEach((dice) => {
+    if (result.length === 0 || result.at(-1)[1] !== dice.edges) {
+      result.push([1, dice.edges]);
+    } else {
+      result.at(-1)[0]++;
+    }
+  });
+
+  diceTowerTextNode.innerHTML = result.map((i) => (i[0] === 1 ? "" : `<b>${i[0]}</b>`) + "d" + i[1]).join("&nbsp;+ ");
 }
 function resetDices() {
   dices = [];

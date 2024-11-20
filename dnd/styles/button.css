@@ -18,6 +18,8 @@
   color: var(--color-black-100);
 
   min-width: 45px;
+
+  -webkit-tap-highlight-color: rgba(94, 84, 70, 0.3);
 }
 
 .button._settings {
