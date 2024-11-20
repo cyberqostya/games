@@ -19,7 +19,7 @@ const diceTowerTextNode = diceTowerNode.querySelector(".dice-tower__text"); // �
 
 function clearResults() {
   total.reset(); // Общий результат
-  dices.forEach((dice) => dice.hideResult()); // Результат каждого кубика
+  dices.forEach((dice) => dice.hideResult && dice.hideResult()); // Результат каждого кубика
 }
 
 // Сброс кубиков и результата (очистка всего)
@@ -50,13 +50,17 @@ window.settings = {
       isActive: false,
       title: "EDIT",
       callback: () => {
-        dices.forEach((dice) => dice.editModeSwitcher(settings.edit.button.isActive));
-
         if (settings.edit.button.isActive) {
           window.addEventListener("click", deleteDice, true);
         } else {
           window.removeEventListener("click", deleteDice, true);
+
+          // После удаления нужно отфильтровать массив кубиков от пустышек
+          dices = dices.filter((i) => i.edges);
+          render();
         }
+
+        dices.forEach((dice) => dice.editModeSwitcher(settings.edit.button.isActive));
       },
     }),
   },
@@ -76,13 +80,9 @@ function renderDicesImages() {
 
   dicesContainerNode.innerHTML = "";
   dices.forEach((dice) => dicesContainerNode.insertAdjacentElement("beforeend", dice.node));
-  // dices.forEach((dice) => {
-  //   dicesContainerNode.insertAdjacentElement("beforeend", dice.node);
-  //   dice.node.style.width = Math.random() + 17 + "%";
-  // });
 
   // Только после добавления всех кубиков просчитываем высоту шрифта относительно их размера
-  dices.forEach((dice) => dice.setResultFontSize());
+  dices.forEach((dice) => dice.setResultFontSize && dice.setResultFontSize());
 }
 
 // ===== Бросок =====
@@ -153,20 +153,23 @@ luckButton.addEventListener("click", () => {
   }
 });
 
-// ===== Сброс кубиков =====
+// ===== Кнопка сброса кубиков =====
 
 function renderDicesQuantityText() {
   diceTowerNode.classList[dices.length > 0 ? "remove" : "add"]("_empty"); // Отображение пустого
 
   // diceTowerTextNode.innerHTML = dices.map((i) => "d" + i.edges).join("&nbsp;+ "); // Просто текст
   const result = []; // [[count: edges]] // example: [[1: 6], [3: 4]] // means: [[1: d6], [3: d4]]
-  dices.forEach((dice) => {
+  for (const dice of dices) {
+    // Для удаление по 1
+    if (!dice.edges) continue;
+
     if (result.length === 0 || result.at(-1)[1] !== dice.edges) {
       result.push([1, dice.edges]);
     } else {
       result.at(-1)[0]++;
     }
-  });
+  }
 
   diceTowerTextNode.innerHTML = result.map((i) => (i[0] === 1 ? "" : `<b>${i[0]}</b>`) + "d" + i[1]).join("&nbsp;+ ");
 }
@@ -204,6 +207,7 @@ Object.keys(settings).forEach((key) => {
 });
 
 // ===== Удаление кубиков по одному =====
+// Вставляем пустышки вместо удаленных кубиков, чтобы верстка не дергалась каждый раз
 
 function deleteDice(e) {
   e.stopPropagation();
@@ -213,18 +217,22 @@ function deleteDice(e) {
 
   const index = Array.from(dicesContainerNode.children).indexOf(dice);
 
-  dices = dices.filter((i, ind) => ind !== index);
+  // dices = dices.filter((i, ind) => ind !== index); // Обычное удаление
+  const tempDice = document.createElement("div"); // Удаление с пустышкой
+  tempDice.classList.add("dice");
+  const tempClass = { node: tempDice };
+  dices = dices.map((i, ind) => (ind !== index ? i : tempClass));
 
   // Лаг на телефоне из-за оптимизации
   // При удалении класса кубика из массива классов переставала анимация тряски
   // Которая перерасчитывалась только при изменении ширины кубика в дом дереве
   // Решение - откл а затем вкл анимации вручную до и после добавления кубиков
-  dices.forEach((i) => i.switchShake(false));
+  dices.forEach((i) => i.switchShake && i.switchShake(false));
   render();
-  dices.forEach((i) => i.switchShake(true));
+  dices.forEach((i) => i.switchShake && i.switchShake(true));
 
   // Когда осталось пусто
-  if (dices.length === 0) {
+  if (!dices.find((dice) => dice.edges)) {
     settings.edit.button.toggle();
   }
 }
