@@ -56,8 +56,13 @@ window.settings = {
           window.removeEventListener("click", deleteDice, true);
 
           // После удаления нужно отфильтровать массив кубиков от пустышек
-          dices = dices.filter((i) => i.edges);
-          render();
+          const dicesAfterFilter = dices.filter((i) => i.edges);
+
+          // Проверка произошло ли хоть одно удаление
+          if (dices.length !== dicesAfterFilter.length) {
+            dices = dicesAfterFilter;
+            render();
+          }
         }
 
         dices.forEach((dice) => dice.editModeSwitcher(settings.edit.button.isActive));
@@ -213,7 +218,9 @@ function deleteDice(e) {
   e.stopPropagation();
 
   const dice = e.target.closest(".dice");
-  if (!dice) return settings.edit.button.toggle();
+
+  // Нажали не на кубик
+  if (!dice || dice.children.length === 0) return settings.edit.button.toggle();
 
   const index = Array.from(dicesContainerNode.children).indexOf(dice);
 

@@ -26,7 +26,7 @@ export default class Dice {
   createNode() {
     const div = document.createElement("div");
     div.classList.add("dice");
-    if (this.edges === 4) div.style.transformOrigin = "center 60%";
+    if (this.edges === 4) div.style.transformOrigin = "center 55%";
 
     const img = document.createElement("img");
     img.setAttribute("alt", "d" + this.edges);
