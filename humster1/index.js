@@ -36,12 +36,12 @@ let resetCounter = 0;
 const RESETS_FOR_HINT = getRandom(5, 8);
 
 // перемешка кнопок
-const RESHUFFLE_START = FINAL_SCORE * 0.5;
+const RESHUFFLE_START = FINAL_SCORE * 0.1;
 let reshuffleCounter = 0;
-const TAPS_TO_RESHUFFLE = getRandom(6, 13);
+const TAPS_TO_RESHUFFLE = getRandom(4, 10);
 
 // спам
-const SPAM_START = FINAL_SCORE * 0.25;
+const SPAM_START = FINAL_SCORE * 0.5;
 let spamButtons = [];
 function checkSpam() {
   if (!spamButtons.length) return;
@@ -56,7 +56,7 @@ function checkSpam() {
 // Вращение
 const ROTATION_INTERVAL = getRandom(30, 45);
 const ROTATION_DURATION = getRandom(10, 20);
-const ROTATION_START = FINAL_SCORE * 0.75;
+const ROTATION_START = FINAL_SCORE * 0.85;
 let rotationAnimation;
 let isRotate = false;
 function rotate() {
