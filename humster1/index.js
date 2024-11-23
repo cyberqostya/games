@@ -36,12 +36,12 @@ let resetCounter = 0;
 const RESETS_FOR_HINT = getRandom(5, 8);
 
 // перемешка кнопок
-const RESHUFFLE_START = FINAL_SCORE * 0.1;
+const RESHUFFLE_START = FINAL_SCORE * 0.5;
 let reshuffleCounter = 0;
 const TAPS_TO_RESHUFFLE = getRandom(4, 10);
 
 // спам
-const SPAM_START = FINAL_SCORE * 0.5;
+const SPAM_START = FINAL_SCORE * 0.01;
 let spamButtons = [];
 function checkSpam() {
   if (!spamButtons.length) return;
@@ -56,12 +56,12 @@ function checkSpam() {
 // Вращение
 const ROTATION_INTERVAL = getRandom(30, 45);
 const ROTATION_DURATION = getRandom(10, 20);
-const ROTATION_START = FINAL_SCORE * 0.85;
+const ROTATION_START = FINAL_SCORE * 0.9;
 let rotationAnimation;
 let isRotate = false;
 function rotate() {
   if (isRotate) return;
-  if (Math.random <= 0.3) return;
+  if (Math.random <= 0.5) return;
 
   isRotate = true;
 
@@ -191,7 +191,7 @@ function render() {
 // kostya
 
 class Square {
-  MAX_TAPS_IN_A_ROW = getRandom(10, 15);
+  MAX_TAPS_IN_A_ROW = getRandom(5, 8);
   TAPS_COOLDOWN = getRandom(10, 15);
 
   constructor(color, value, node) {
