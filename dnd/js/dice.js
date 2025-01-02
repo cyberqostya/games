@@ -47,26 +47,35 @@ export default class Dice {
   }
 
   _getRandomEdge = () => 1 + Math.floor(Math.random() * this.edges);
-  _getKarmaEdge = () => this.MIN_SUCCESS_ROLL + Math.round(Math.random() * (this.edges - this.MIN_SUCCESS_ROLL));
+  _getKarmaSuccessEdge = () => this.MIN_SUCCESS_ROLL + Math.round(Math.random() * (this.edges - this.MIN_SUCCESS_ROLL));
+  _getKarmaFailureEdge = () => 1 + Math.round(Math.random() * (this.edges - this.MIN_SUCCESS_ROLL));
   roll = (karmaCounter) => {
     let result;
+    // console.log("бросок с текущей кармой = ", karmaCounter);
 
-    if (karmaCounter !== undefined) {
-      // Кармический бросок
-      if (karmaCounter > 2 && Math.random() > 0.7 - karmaCounter / 10) {
-        // console.log("КАРМА", karmaCounter);
-        result = this._getKarmaEdge();
-      }
-      // Обычный бросок
-      else {
-        // console.log("обычный бросок", karmaCounter);
-        result = this._getRandomEdge();
+    // Обычный бросок
+    if (karmaCounter === 0 || this.FAILURE_MODIFIER + Math.abs(karmaCounter / 10) < Math.random()) {
+      // console.log("обычный бросок");
+      result = this._getRandomEdge();
+    }
+
+    // Кармический бросок
+    else {
+      if (karmaCounter > 0) {
+        // console.log("СЫГРАЛА ПЛЮС КАРМА");
+        result = this._getKarmaSuccessEdge();
+      } else {
+        // console.log("СЫГРАЛА МИНУС КАРМА");
+        result = this._getKarmaFailureEdge();
       }
     }
 
     this.playSound();
     this.animate();
     setTimeout(() => this.showResult(result), this.ANIMATION_DURATION * 0.8);
+
+    // console.log("результат", result);
+    // console.log("-----------------------------------");
 
     return result;
   };

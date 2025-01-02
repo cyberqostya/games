@@ -2,7 +2,7 @@ import Dice from "./js/dice.js";
 import SettingsButton from "./js/settingsButton.js";
 import Total from "./js/total.js";
 
-// ===== Переменные =====
+// ===== Переменные ===== //
 
 let dices = []; // Классы кубиков
 const banInterfaceNode = document.querySelector(".ban-interface"); // Блокировщик интерфейса против нажатий при выполнении вычислений
@@ -13,7 +13,7 @@ const MAX_DICES_QUANTITY = 25;
 const diceTowerNode = document.querySelector(".dice-tower"); // Кнопка сброса кубиков
 const diceTowerTextNode = diceTowerNode.querySelector(".dice-tower__text"); // Текст кнопки сброса кубиков (добавленные кубики)
 
-// ===== Вспомогательные функции =====
+// ===== Вспомогательные функции ===== //
 
 // Очистка результатов кубиков
 
@@ -29,7 +29,7 @@ function resetDices() {
   render();
 }
 
-// ===== Настройки =====
+// ===== Настройки ===== //
 
 window.settings = {
   // Карма
@@ -71,7 +71,7 @@ window.settings = {
   },
 };
 
-// ===== Визуал кубиков =====
+// ===== Визуал кубиков ===== //
 
 function renderDicesImages() {
   dicesContainerNode.classList[dices.length === 0 ? "add" : "remove"]("_empty"); // Пусто
@@ -90,7 +90,7 @@ function renderDicesImages() {
   dices.forEach((dice) => dice.setResultFontSize && dice.setResultFontSize());
 }
 
-// ===== Бросок =====
+// ===== Бросок ===== //
 
 dicesContainerNode.addEventListener("click", async () => {
   banInterfaceNode.classList.add("_disabled");
@@ -108,10 +108,11 @@ dicesContainerNode.addEventListener("click", async () => {
       if (result <= dice.MAX_FAILURE_ROLL) {
         settings.karma.counter += 1;
       } else if (result >= dice.MIN_SUCCESS_ROLL) {
-        settings.karma.counter = 0;
-      } else {
-        settings.karma.counter += 0.5;
+        settings.karma.counter -= 1;
       }
+      // else {
+      //   settings.karma.counter += 0.5;
+      // }
     } else {
       settings.karma.counter = 0;
     }
@@ -126,7 +127,7 @@ dicesContainerNode.addEventListener("click", async () => {
   banInterfaceNode.classList.remove("_disabled");
 });
 
-// ===== Удачный бросок =====
+// ===== Удачный бросок ===== //
 
 let luckCounter = 0;
 const TAPS_TO_LUCK = 3;
@@ -158,7 +159,7 @@ luckButton.addEventListener("click", () => {
   }
 });
 
-// ===== Кнопка сброса кубиков =====
+// ===== Кнопка сброса кубиков ===== //
 
 function renderDicesQuantityText() {
   diceTowerNode.classList[dices.length > 0 ? "remove" : "add"]("_empty"); // Отображение пустого
@@ -181,7 +182,7 @@ function renderDicesQuantityText() {
 
 diceTowerNode.addEventListener("click", resetDices);
 
-// ===== Рендер =====
+// ===== Рендер ===== //
 
 function render() {
   // Должно выполняться один раз при добавлении кубика // Оптимизировано
@@ -191,7 +192,7 @@ function render() {
   renderDicesQuantityText();
 }
 
-// ===== Кнопки добавления кубиков =====
+// ===== Кнопки добавления кубиков ===== //
 
 const diceButtonsNodes = document.querySelectorAll(".button._dice");
 diceButtonsNodes.forEach((diceButtonNode) => {
@@ -205,13 +206,13 @@ diceButtonsNodes.forEach((diceButtonNode) => {
   });
 });
 
-// ===== Кнопки настроек =====
+// ===== Кнопки настроек ===== //
 
 Object.keys(settings).forEach((key) => {
   document.querySelector(".buttons-container._top").insertAdjacentElement("beforeend", settings[key].button.node);
 });
 
-// ===== Удаление кубиков по одному =====
+// ===== Удаление кубиков по одному ===== //
 // Вставляем пустышки вместо удаленных кубиков, чтобы верстка не дергалась каждый раз
 
 function deleteDice(e) {
